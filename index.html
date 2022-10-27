@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script type="text/javascript" src="js/user.js" ></script>
+    <script type="text/javascript" src="js/app.js" defer></script>
+
+</head>
+<body>
+<div class="container-control">
+       <div class="control">
+              <div id="blue-player" class="select-player" onclick="selectPlayer('userD')">
+                    Person
+              </div>
+              <div id="purple-player" class="select-player " onclick="selectPlayer('userA')">
+                     Person
+              </div>
+              <div  id="pink-player" class="select-player" onclick="selectPlayer('userC')">
+                     Person
+              </div>
+              
+              <div id="green-player" class="select-player" onclick="selectPlayer('userB')">
+                    Person
+              </div>
+       </div>
+       <div>
+          <button class="button-valid-action " onclick="validateSelection()">Valider</button>
+       </div>
+</div>
+<div id="container-game">
+
+    <div id="button-user-one" class="action player-one" onclick="userOneAction()">
+    </div>
+
+    <div id="button-user-two" class="action" onclick="userTwoAction()">
+    </div>
+
+    <div id="button-user-tree" class="action" onclick="userTreeAction()">
+    </div>
+
+    <div id="button-user-four" class="action" onclick="userFourAction()">
+    </div>
+
+    <div id="pause-top-left" class="step pause">
+      
+    </div>
+    <div id="pause-top-right" class="step pause">
+      
+    </div>
+    <div id="pause-bottom-left" class="step pause">
+      
+    </div>
+    <div id="pause-bottom-right" class="step pause">
+      
+    </div>
+    <div id="user-one" class="container-step">
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+     </div>
+     <div id="vertical-line">
+     <div id="user-two" class="container-step">
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+     </div>
+      <div id="space-user" class="container-step">
+            
+                <div class=" bloc">
+                </div>
+                <div id="home-user-one" class="bloc">
+                </div>
+                <div  id="arrived-user-one" class=" bloc">
+                </div>
+                
+                <div  class="bloc">
+                </div>
+    
+    
+            <div id="arrived-user-four"class="bloc">
+            </div>
+            <div class="bloc">
+            </div>
+            <div class=" bloc">
+            </div>
+            <div id="home-user-two" class=" bloc">
+            </div>
+            <div  id="home-user-four" class=" bloc">
+            </div>
+            <div  class=" bloc">
+            </div>
+            <div class=" bloc">
+            </div>
+            <div id="arrived-user-two" class=" bloc">
+            </div>
+        
+    
+             <div class=" bloc">
+            </div>
+            <div id="arrived-user-tree" class=" bloc">
+            </div>
+            <div id="home-user-tree" class=" bloc">
+            </div>
+          
+            <div class=" bloc">
+            </div>
+     </div>
+      <div id="user-tree" class="container-step">
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+     </div>
+     </div>
+      <div id="user-four" class="container-step">
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+    
+             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+     </div>
+
+     <div class="footer">
+        <button onclick="leave()">Quitter</button>
+     </div>
+    </div>
+</body>
+</html>
