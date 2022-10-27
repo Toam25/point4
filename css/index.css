@@ -216,7 +216,12 @@ body {
     left: 99px;
     border-radius: 0px 0px 0px 40px;
 }
-
+.step>.pawn {
+    position: absolute;
+    height: 18px;
+    width: 18px !important;
+    left: 5px;
+}
 #pause-top-right {
     top: 97px;
     left: 260px;

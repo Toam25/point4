@@ -59,6 +59,7 @@ let userA = {
   isActif: false,
   isCurrentUser :false,
   homeId: 'home-user-one',
+  buttonAction : "button-user-one",
   "pawns": [userA1, userA2, userA3, userA4 ]
 }
 let userB = {
@@ -66,6 +67,7 @@ let userB = {
   isActif: false,
   isCurrentUser :false,
   homeId: 'home-user-two' ,
+  buttonAction : "button-user-two",
   "pawns": [userB1, userB2, userB3, userB4 ] 
 }
 let userC = {
@@ -73,6 +75,7 @@ let userC = {
   isActif: false,
   isCurrentUser :false,
   homeId : 'home-user-tree',
+  buttonAction : "button-user-free",
   "pawns": [ userC1, userC2, userC3, userC4 ]
 }
 let userD = {
@@ -80,5 +83,6 @@ let userD = {
   isActif: false,
   isCurrentUser :false,
   homeId:   'home-user-four',
+  buttonAction : "button-user-four",
   "pawns": [ userD1, userD2, userD3, userD4 ]
 }

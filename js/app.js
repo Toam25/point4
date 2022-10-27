@@ -1,12 +1,16 @@
 
 let playersIdentity = ['Pas de joeur', 'Personne', 'Robot']
 let steps = document.getElementsByClassName('step')
-
+let userActifList=[];
 let userTypeA = 1;
 let userTypeB = 1;
 let userTypeC = 1;
 let userTypeD = 1;
 const PAWN_SIZE = 4;
+
+function dice (user){
+    console.log(user)
+}
 function selectPlayer(user) {
     switch (user) {
         case "userA":
@@ -29,11 +33,9 @@ function selectPlayer(user) {
         default:
             break;
     }
-    console.log(user);
 }
 function validateSelection() {
-    document.getElementsByClassName('container-control')[0].classList.add('hidden')
-    console.log(userA, userB, userC, userD)
+ 
     if (userTypeA == 1 || userTypeA == 2) {
         userA.isActif = true;
         if (userTypeA == 2) userA.isBot = true
@@ -53,7 +55,6 @@ function validateSelection() {
     if (userTypeC == 1 || userTypeC == 2) {
         userC.isActif = true;
         if (userTypeC == 2) userC.isBot = true
-        console.log(userC)
     }
     else {
         document.getElementById('button-user-tree').classList.add('hidden')
@@ -66,31 +67,39 @@ function validateSelection() {
     else {
         document.getElementById('button-user-four').classList.add('hidden')
     }
-
-
-    initPlayer()
+    initPlayer(()=>{
+        document.getElementsByClassName('container-control')[0].classList.add('hidden')
+    })
 }
-function initPlayer(){
+function initPlayer(callback){
     
      if(userA.isActif){
         placePawnsForUserActifInHome(userA)
-        console.log("b")
+        userActifList.push(userA)
      }
      if(userB.isActif){
-        console.log("b")
         placePawnsForUserActifInHome(userB)
+        userActifList.push(userB)
      }
      if(userC.isActif){
         placePawnsForUserActifInHome(userC)
-        console.log("b")
+        userActifList.push(userC)
      }
      if(userD.isActif){
         placePawnsForUserActifInHome(userD)
-        console.log("b")
+        userActifList.push(userD)
+     }
+     //check if number or player > 0
+     if(userActifList.length>1){
+        userActifList[0].isCurrentUser=true;
+        setCurentUserActif(userActifList[0]);
+        callback();
+     }
+     else{
+        alert("Selectionner deux jusqu'à quatre joeurs")
      }
 }
 function placePawnsForUserActifInHome(user){
-    console.log(user.homeId);
     for (i= 0; i < PAWN_SIZE; i++) {
         document.getElementById(user.homeId).insertAdjacentHTML('beforeend',user.pawns[i].userAvatar);
     }
@@ -125,9 +134,19 @@ function resetSelectePlayer(){
         userTypeB = 1;
         userTypeC = 1;
         userTypeD = 1;
+        userActifList=[]
         document.getElementById('purple-player').innerText = playersIdentity[userTypeA];
         document.getElementById('green-player').innerText = playersIdentity[userTypeB];
         document.getElementById('pink-player').innerText = playersIdentity[userTypeC];
         document.getElementById('blue-player').innerText = playersIdentity[userTypeD];
  
+}
+function setCurentUserActif(user){
+    let currenUser = document.getElementById(user.buttonAction)
+    document.getElementsByClassName('action')[0].setAttribute('disabled','')
+    document.getElementsByClassName('action')[1].setAttribute('disabled','')
+    document.getElementsByClassName('action')[2].setAttribute('disabled','')
+    document.getElementsByClassName('action')[3].setAttribute('disabled','')
+    currenUser.removeAttribute('disabled','')
+    
 }
