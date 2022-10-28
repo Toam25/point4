@@ -6,11 +6,27 @@ let userTypeA = 1;
 let userTypeB = 1;
 let userTypeC = 1;
 let userTypeD = 1;
+let userActif;
+let diceValue;
+let songStep = new Audio('songs/step.mp3');
+    var dead_sound = new Audio('assets/audio/dead.mp3');
+    var inout_sound = new Audio('assets/audio/inout.mp3');
+    var dice_sound = new Audio('assets/audio/dice.mp3');
+    var winnerSound = new Audio('assets/audio/winner.mp3');
+    let safePlace = [0,1,2,3];
 const PAWN_SIZE = 4;
 
-function dice (user){
-    console.log(user)
+function dice (){
+    diceValue=getRandomInt()
+    document.getElementById(userActif.buttonAction).innerText=diceValue
+    stepsMove(userActif.pawns[0],diceValue)
 }
+
+
+
+
+
+
 function selectPlayer(user) {
     switch (user) {
         case "userA":
@@ -93,6 +109,7 @@ function initPlayer(callback){
      if(userActifList.length>1){
         userActifList[0].isCurrentUser=true;
         setCurentUserActif(userActifList[0]);
+        userActif=userActifList[0];
         callback();
      }
      else{
@@ -149,4 +166,75 @@ function setCurentUserActif(user){
     document.getElementsByClassName('action')[3].setAttribute('disabled','')
     currenUser.removeAttribute('disabled','')
     
+}
+function getRandomInt(max=7) {
+    min = Math.ceil(1);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+    return 1;
+}
+
+async function stepsMove (user,step){
+    
+    let currentPosition=user.currentPosition;
+
+    if(user.status=="free"){
+        for(let j=0;j<step; j++){
+            if(user.road.length===currentPosition+step){
+                console.log('egale')
+                document.getElementById(user.idAvatart).remove();
+
+                console.log("user.road.length",user.road.length)
+                console.log("currentPosition+step",currentPosition+step)
+                console.log("currentPosition+j",currentPosition+j)
+                if(user.road.length==currentPosition+j){
+                     document.getElementById('arrived-user-one').insertAdjacentHTML('beforeend',user.userAvatar)
+                     winnerSound.play()
+                     alert("you win");
+                    break;
+                }
+                else{
+                    steps[user.road[j+currentPosition]].insertAdjacentHTML('beforeend',user.userAvatar);
+                }
+                songStep.play()
+                resetPosition(user)
+                // clearInterval(robot)
+            }
+            else if(user.road.length>currentPosition+step){
+                  if(j+currentPosition>user.road.length){
+                        console.log('pas assez');
+                        break;
+                    }
+                    else{
+                          document.getElementById(user.idAvatart).remove();
+                          steps[user.road[j+currentPosition]].insertAdjacentHTML('beforeend',user.userAvatar);
+                          user.currentPosition=j+currentPosition
+                    }
+                    user.currentPosition+=1
+                    songStep.play()
+                    await sleep(500)
+            }
+          
+        }
+    }
+    else if(step==1){
+        user.status="free"
+        user.currentPosition=1;
+        songStep.play()
+        console.log(user.idAvatar)
+        document.getElementById(user.idAvatart).remove();
+        steps[user.road[0]].insertAdjacentHTML('beforeend',user.userAvatar);
+    }
+
+     console.log("user.road.endd finale ",user.currentPosition)
+}
+ 
+ function resetPosition(user){
+    document.getElementById(user.idAvatart).remove();
+    user.currentPosition=0
+    user.status="hom"
+    document.getElementById('home-user-One').innerHTML =userA.userAvatar;
+ }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
