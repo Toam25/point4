@@ -182,7 +182,7 @@ async function stepsMove (user,step){
         for(let j=0;j<step; j++){
             if(user.road.length===currentPosition+step){
                 console.log('egale')
-                document.getElementById(user.idAvatart).remove();
+                document.querySelector(`body #${user.idAvatar}`);
 
                 console.log("user.road.length",user.road.length)
                 console.log("currentPosition+step",currentPosition+step)
@@ -206,7 +206,7 @@ async function stepsMove (user,step){
                         break;
                     }
                     else{
-                          document.getElementById(user.idAvatart).remove();
+                          document.querySelector(`body #${user.idAvatar}`).remove();
                           steps[user.road[j+currentPosition]].insertAdjacentHTML('beforeend',user.userAvatar);
                           user.currentPosition=j+currentPosition
                     }
@@ -221,8 +221,7 @@ async function stepsMove (user,step){
         user.status="free"
         user.currentPosition=1;
         songStep.play()
-        console.log(user.idAvatar)
-        document.getElementById(user.idAvatart).remove();
+        document.querySelector(`body #${user.idAvatar}`).remove();
         steps[user.road[0]].insertAdjacentHTML('beforeend',user.userAvatar);
     }
 
