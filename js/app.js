@@ -21,6 +21,7 @@ let divElementUserActif;
 let lastDiceValue = 0;
 let showDiceFaceTemporary;
 const PAWN_SIZE = 4;
+const ROAD_SIZE=51.
 
 function dice() {
     diceValue = getRandomInt(6)
@@ -210,13 +211,26 @@ async function stepsMove(user, step) {
         }
     }
     resetAllPawnsVisibility()
+    setNumberOfJourneysTraveledPerCent()
+
     if (isSwitchToNextUser) {
         switchToNextUser()
     }
     else {
         isSwitchToNextUser = true
     }
-
+}
+function setNumberOfJourneysTraveledPerCent(){
+    let tempValue=0;
+    let roadTotalSize=PAWN_SIZE*ROAD_SIZE
+    userActif.pawns.forEach(pawn => {
+        tempValue=pawn.currentPosition+tempValue;
+        console.log("value" , tempValue);
+    });
+    console.log(userActif)
+    console.log("value total" ,tempValue)
+    console.log("value divise" ,Math.round(tempValue/roadTotalSize*100))
+    document.getElementById(mapUserToColor(userActif)).innerText=Math.round(tempValue/roadTotalSize*100)+"%"
 }
 function switchToNextUser() {
     ++indiceKeyUserActiflist;
@@ -322,4 +336,20 @@ function viewInstru() {
 }
 const hideInstru = () => {
     document.getElementById('modal').classList.add('hidden')
+}
+function mapUserToColor(user){
+    switch (user.name) {
+        case "userA":
+            return "yellow"
+        break;
+        case "userB":
+            return "green"
+        break;
+        case "userC":
+            return "red"
+        break;
+        case "userD":
+            return "blue"
+        break;
+    }
 }
