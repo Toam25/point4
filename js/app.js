@@ -1,57 +1,62 @@
 
-let playersIdentity = ['Pas de joeur', 'Personne', 'Robot']
-let steps = document.getElementsByClassName('step')
-let userActifList=[];
+let playersIdentity = ['Pas de joeur', 'Human'/*, 'Robot'*/]
+let userActifList = [];
+let indiceKeyUserActiflist = 0
 let userTypeA = 1;
 let userTypeB = 1;
 let userTypeC = 1;
 let userTypeD = 1;
 let userActif;
 let diceValue;
+let pawnSelected;
 let songStep = new Audio('songs/step.mp3');
-    var dead_sound = new Audio('assets/audio/dead.mp3');
-    var inout_sound = new Audio('assets/audio/inout.mp3');
-    var dice_sound = new Audio('assets/audio/dice.mp3');
-    var winnerSound = new Audio('assets/audio/winner.mp3');
-    let safePlace = [0,1,2,3];
+var dead_sound = new Audio('assets/audio/dead.mp3');
+var inout_sound = new Audio('assets/audio/inout.mp3');
+var dice_sound = new Audio('songs/dice.mp3');
+var winnerSound = new Audio('assets/audio/winner.mp3');
+let safePlace = [0, 1, 2, 3];
+let isSwitchToNextUser = true
+let buttonActions;
+let divElementUserActif;
+let lastDiceValue = 0;
+let showDiceFaceTemporary;
 const PAWN_SIZE = 4;
 
-function dice (){
-    diceValue=getRandomInt()
-    document.getElementById(userActif.buttonAction).innerText=diceValue
-    stepsMove(userActif.pawns[0],diceValue)
+function dice() {
+    diceValue = getRandomInt(6)
+    dice_sound.play()
+    document.getElementById(userActif.buttonAction).innerText = diceValue;
+    checkIfPawnCanMoveAndMakeItToVisible(diceValue)
+}
+const checkIfPawnCanMoveAndMakeItToVisible = (diceValue) => {
+    let pawnsUserActif = userActif.pawns;
+    let isPawnCanMove = false;
+    if (diceValue == 1) {
+        isSwitchToNextUser = false;
+    }
+    for (const pawnUserActif of pawnsUserActif) {
+        if ((diceValue == 1 || pawnUserActif.status == "free") && pawnUserActif.currentPosition + diceValue < pawnUserActif.road.length + 1) {
+            setPawnVisible(pawnUserActif)
+            isPawnCanMove = true
+        }
+    }
+    if (!isPawnCanMove) {
+        switchToNextUser();
+    }
 }
 
-
-
-
-
-
-function selectPlayer(user) {
-    switch (user) {
-        case "userA":
-            userTypeA = userTypeA < 2 ? ++userTypeA : 0;
-            document.getElementById('purple-player').innerText = playersIdentity[userTypeA];
-            break;
-        case "userB":
-            userTypeB = userTypeB < 2 ? ++userTypeB : 0;
-            document.getElementById('green-player').innerText = playersIdentity[userTypeB];
-            break;
-        case "userC":
-            userTypeC = userTypeC < 2 ? ++userTypeC : 0;
-            document.getElementById('pink-player').innerText = playersIdentity[userTypeC];
-            break;
-        case "userD":
-            userTypeD = userTypeD < 2 ? ++userTypeD : 0;
-            document.getElementById('blue-player').innerText = playersIdentity[userTypeD];
-            break;
-
-        default:
-            break;
+const setPawnVisible = (pawnUserActif) => {
+    document.getElementById(pawnUserActif.idAvatar).classList.add('canMove')
+    document.getElementById(pawnUserActif.idAvatar).removeAttribute('disabled')
+}
+const resetAllPawnsVisibility = () => {
+    for (const pawnDivElement of document.getElementsByClassName('pawn')) {
+        pawnDivElement.classList.remove('canMove')
+        pawnDivElement.setAttribute('disabled', true)
     }
 }
 function validateSelection() {
- 
+
     if (userTypeA == 1 || userTypeA == 2) {
         userA.isActif = true;
         if (userTypeA == 2) userA.isBot = true
@@ -83,61 +88,67 @@ function validateSelection() {
     else {
         document.getElementById('button-user-four').classList.add('hidden')
     }
-    initPlayer(()=>{
+    initPlayer(() => {
+        // hide window control
         document.getElementsByClassName('container-control')[0].classList.add('hidden')
+        divElementUserActif = document.getElementById(userActif.buttonAction).classList.add('active')
     })
 }
-function initPlayer(callback){
-    
-     if(userA.isActif){
+function initPlayer(callback) {
+
+    if (userA.isActif) {
         placePawnsForUserActifInHome(userA)
         userActifList.push(userA)
-     }
-     if(userB.isActif){
+    }
+    if (userB.isActif) {
         placePawnsForUserActifInHome(userB)
         userActifList.push(userB)
-     }
-     if(userC.isActif){
+    }
+    if (userC.isActif) {
         placePawnsForUserActifInHome(userC)
         userActifList.push(userC)
-     }
-     if(userD.isActif){
+    }
+    if (userD.isActif) {
         placePawnsForUserActifInHome(userD)
         userActifList.push(userD)
-     }
-     //check if number or player > 0
-     if(userActifList.length>1){
-        userActifList[0].isCurrentUser=true;
-        setCurentUserActif(userActifList[0]);
-        userActif=userActifList[0];
+    }
+    //check if number or player > 0
+    if (userActifList.length >= 1) {
+        userActifList[indiceKeyUserActiflist].isCurrentUser = true;
+        resetAllPawnsVisibility()
+        setCurentUserActif(userActifList[indiceKeyUserActiflist]);
+        userActif = userActifList[indiceKeyUserActiflist];
+        for (const userInlistActif of userActifList) {
+            for (const pawn of userInlistActif.pawns) {
+                document.getElementById(pawn.idAvatar).addEventListener('click', (e) => {
+                    pawnSelected = getPawnByDivElement(pawn.idAvatar);
+                    resetAllPawnsVisibility()
+                    stepsMove(pawnSelected, diceValue)
+                })
+            }
+        }
         callback();
-     }
-     else{
+    }
+    else {
         alert("Selectionner deux jusqu'à quatre joeurs")
-     }
-}
-function placePawnsForUserActifInHome(user){
-    for (i= 0; i < PAWN_SIZE; i++) {
-        document.getElementById(user.homeId).insertAdjacentHTML('beforeend',user.pawns[i].userAvatar);
     }
 }
-function leave() {
-    document.getElementsByClassName('container-control')[0].classList.remove('hidden')
-    resetSelectePlayer()
-    updateUser(userA,true,[1,2,3,4]);
-    updateUser(userB,true,[1,2,3,4]);
-    updateUser(userC,true,[1,2,3,4]);
-    updateUser(userD,true,[1,2,3,4]);
- 
+
+function getPawnByDivElement(id) {
+    for (const pawn of userActif.pawns) {
+        if (pawn.idAvatar === id) {
+            return pawn
+        }
+    }
 }
-function updateUser(user,pawnsIds=[],isActif=false,isBot=false,status="home",currentPosition=0,isCurrentUser=false) {
-    if(user.isActif){
+function updateUser(user, pawnsIds = [], isActif = false, isBot = false, status = "home", currentPosition = 0, isCurrentUser = false) {
+    if (user.isActif) {
         let pawn;
         for (const pawnsId of pawnsIds) {
-            pawn=user.pawns[pawnsId-1]
+            pawn = user.pawns[pawnsId - 1]
             pawn.status = status
-            pawn.currentPosition=currentPosition
-            if(currentPosition==0){
+            pawn.currentPosition = currentPosition
+            if (currentPosition == 0) {
                 document.getElementById(pawn.idAvatar).remove()
             }
         }
@@ -146,94 +157,169 @@ function updateUser(user,pawnsIds=[],isActif=false,isBot=false,status="home",cur
     user.isBot = isBot;
     user.isCurrentUser = isCurrentUser;
 }
-function resetSelectePlayer(){
-        userTypeA = 1;
-        userTypeB = 1;
-        userTypeC = 1;
-        userTypeD = 1;
-        userActifList=[]
-        document.getElementById('purple-player').innerText = playersIdentity[userTypeA];
-        document.getElementById('green-player').innerText = playersIdentity[userTypeB];
-        document.getElementById('pink-player').innerText = playersIdentity[userTypeC];
-        document.getElementById('blue-player').innerText = playersIdentity[userTypeD];
- 
+
+
+async function stepsMove(user, step) {
+    let currentPosition = user.currentPosition;
+    let avatar = document.getElementById(user.idAvatar);
+    let position;
+    user.status = "free"
+    for (let j = 0; j < step; j++) {
+
+        if (user.road.length >= currentPosition + step) {
+            if (j + currentPosition < user.road.length) {
+                position = user.road[j + currentPosition]
+                document.getElementsByClassName('step')[position].append(avatar);
+                user.currentPosition = j + currentPosition
+                user.currentPosition += 1
+                songStep.play()
+                await sleep(500)
+            }
+
+        }
+        else {
+            break
+        }
+    }
+    for (const userInList of userActifList) {
+        if (userActif === userInList) {
+            continue;
+        }
+        else {
+            for (const i of userActif.pawns) {
+                for (const j of userInList.pawns) {
+                    if (i.road[i.currentPosition] == j.road[j.currentPosition]) {
+
+                        if (!safePlace.includes(j.road[j.currentPosition - 1])) {
+                            while (j.currentPosition != 0) {
+                                document.getElementsByClassName('step')[j.road[j.currentPosition - 1]].append(document.getElementById(j.idAvatar));
+                                j.currentPosition -= 1
+                                await sleep(100)
+                            }
+                            document.getElementById(userInList.homeId).append(document.getElementById(j.idAvatar))
+                            isSwitchToNextUser = false;
+                        }
+                        j.status = "home"
+                        dead_sound.play()
+                    }
+                    else {
+                        continue
+                    }
+                }
+            }
+        }
+    }
+    resetAllPawnsVisibility()
+    if (isSwitchToNextUser) {
+        switchToNextUser()
+    }
+    else {
+        isSwitchToNextUser = true
+    }
+
 }
-function setCurentUserActif(user){
-    let currenUser = document.getElementById(user.buttonAction)
-    document.getElementsByClassName('action')[0].setAttribute('disabled','')
-    document.getElementsByClassName('action')[1].setAttribute('disabled','')
-    document.getElementsByClassName('action')[2].setAttribute('disabled','')
-    document.getElementsByClassName('action')[3].setAttribute('disabled','')
-    currenUser.removeAttribute('disabled','')
-    
+function switchToNextUser() {
+    ++indiceKeyUserActiflist;
+    //set Indice of user to next user
+    if (userActifList.length - 1 < indiceKeyUserActiflist) {
+        indiceKeyUserActiflist = 0
+    }
+    // set nex user 
+    userActif = userActifList[indiceKeyUserActiflist]
+
+    //set button next user 
+    buttonActions = document.getElementsByClassName('action');
+    //disable all button user
+    disableButtonElement(buttonActions)
+    //actif next button user
+    divElementUserActif = document.getElementById(userActif.buttonAction);
+    divElementUserActif.disabled = false
+    divElementUserActif.classList.add('active')
+    //make pawn user actif visible  
+    removePawnsUserDivElementToFront();
+    makePawnsUserDivElementToFront();
+
 }
-function getRandomInt(max=7) {
+
+const makePawnsUserDivElementToFront = () => {
+    for (const pawnUserActifDivElement of userActif.pawns) {
+        document.getElementById(pawnUserActifDivElement.idAvatar).classList.add('zIndexMax')
+    }
+}
+const removePawnsUserDivElementToFront = () => {
+    for (const pawnUserActifDivElement of document.getElementsByClassName('pawn')) {
+        pawnUserActifDivElement.classList.remove('zIndexMax')
+    }
+}
+function disableButtonElement(buttons) {
+    for (const buttonAction of buttonActions) {
+        buttonAction.setAttribute('disabled', true)
+        buttonAction.classList.remove('active')
+    }
+}
+function resetPosition(user) {
+    document.getElementById(user.idAvatart).remove();
+    user.currentPosition = 0
+    user.status = "hom"
+    document.getElementById('home-user-One').innerHTML = userA.userAvatar;
+}
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+function contentInitial(classInitialAvatar, avatar) {
+    return `<div class="${classInitialAvatar}">${avatar}</div>`;
+}
+function getRandomInt(max = 7) {
     min = Math.ceil(1);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
-    return 1;
 }
 
-async function stepsMove (user,step){
-    
-    let currentPosition=user.currentPosition;
+function setCurentUserActif(user) {
+    let currenUser = document.getElementById(user.buttonAction)
+    document.getElementsByClassName('action')[0].setAttribute('disabled', '')
+    document.getElementsByClassName('action')[1].setAttribute('disabled', '')
+    document.getElementsByClassName('action')[2].setAttribute('disabled', '')
+    document.getElementsByClassName('action')[3].setAttribute('disabled', '')
+    currenUser.removeAttribute('disabled', '')
 
-    if(user.status=="free"){
-        for(let j=0;j<step; j++){
-            if(user.road.length===currentPosition+step){
-                console.log('egale')
-                document.querySelector(`body #${user.idAvatar}`);
-
-                console.log("user.road.length",user.road.length)
-                console.log("currentPosition+step",currentPosition+step)
-                console.log("currentPosition+j",currentPosition+j)
-                if(user.road.length==currentPosition+j){
-                     document.getElementById('arrived-user-one').insertAdjacentHTML('beforeend',user.userAvatar)
-                     winnerSound.play()
-                     alert("you win");
-                    break;
-                }
-                else{
-                    steps[user.road[j+currentPosition]].insertAdjacentHTML('beforeend',user.userAvatar);
-                }
-                songStep.play()
-                resetPosition(user)
-                // clearInterval(robot)
-            }
-            else if(user.road.length>currentPosition+step){
-                  if(j+currentPosition>user.road.length){
-                        console.log('pas assez');
-                        break;
-                    }
-                    else{
-                          document.querySelector(`body #${user.idAvatar}`).remove();
-                          steps[user.road[j+currentPosition]].insertAdjacentHTML('beforeend',user.userAvatar);
-                          user.currentPosition=j+currentPosition
-                    }
-                    user.currentPosition+=1
-                    songStep.play()
-                    await sleep(500)
-            }
-          
-        }
-    }
-    else if(step==1){
-        user.status="free"
-        user.currentPosition=1;
-        songStep.play()
-        document.querySelector(`body #${user.idAvatar}`).remove();
-        steps[user.road[0]].insertAdjacentHTML('beforeend',user.userAvatar);
-    }
-
-     console.log("user.road.endd finale ",user.currentPosition)
 }
- 
- function resetPosition(user){
-    document.getElementById(user.idAvatart).remove();
-    user.currentPosition=0
-    user.status="hom"
-    document.getElementById('home-user-One').innerHTML =userA.userAvatar;
- }
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+function placePawnsForUserActifInHome(user) {
+    for (i = 0; i < PAWN_SIZE; i++) {
+        document.getElementById(user.homeId).insertAdjacentHTML('beforeend', user.pawns[i].userAvatar);
+    }
+}
+function leave() {
+    window.location = "/"
+}
+function selectPlayer(user) {
+    const typeUserMax = playersIdentity.length - 1
+    switch (user) {
+        case "userA":
+            userTypeA = userTypeA < typeUserMax ? ++userTypeA : 0;
+            document.getElementById('purple-player').innerText = playersIdentity[userTypeA];
+            break;
+        case "userB":
+            userTypeB = userTypeB < typeUserMax ? ++userTypeB : 0;
+            document.getElementById('green-player').innerText = playersIdentity[userTypeB];
+            break;
+        case "userC":
+            userTypeC = userTypeC < typeUserMax ? ++userTypeC : 0;
+            document.getElementById('pink-player').innerText = playersIdentity[userTypeC];
+            break;
+        case "userD":
+            userTypeD = userTypeD < typeUserMax ? ++userTypeD : 0;
+            document.getElementById('blue-player').innerText = playersIdentity[userTypeD];
+            break;
+
+        default:
+            break;
+    }
+
+}
+function viewInstru() {
+    document.getElementById('modal').classList.remove('hidden')
+}
+const hideInstru = () => {
+    document.getElementById('modal').classList.add('hidden')
 }

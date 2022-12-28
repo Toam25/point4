@@ -6,12 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/dice.css">
     <script type="text/javascript" src="js/user.js" ></script>
     <script type="text/javascript" src="js/app.js" defer></script>
 
 </head>
 <body>
+<!--input for debugin-->
+ <!--input id="dice_value"/-->
+<!--  -->
+<h1 class="version">Point4 vAlfa</h1>
 <div class="container-control">
+       <div id="modal" class="modal hidden">
+              <div class="container_modal">
+              
+                  <div class="body_modal">
+              Les règles du jeu point quatres sont paraille que le jeu ludo sauf que pour être libre, il faut avoir un (on apple ça bonde)
+                  </div>
+
+                  <button class="closeModal" onclick="hideInstru()">Fermer</button>
+              </div>
+       </div>
+       <h1>Point <span>4</span></h1>
        <div class="control">
               <div id="blue-player" class="select-player" onclick="selectPlayer('userD')">
                     Person
@@ -29,6 +45,10 @@
        </div>
        <div>
           <button class="button-valid-action " onclick="validateSelection()">Valider</button>
+       </div>
+       <div class="appin">
+              <a href="#" onclick="viewInstru()">Instruction</a>
+              <a href="#">A propos</a>
        </div>
 </div>
 <div id="container-game">
@@ -58,45 +78,54 @@
       
     </div>
     <div id="user-one" class="container-step">
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
-            </div>
-    
-             <div class="step bloc">
-            </div>
-            <div class="step bloc">
-            </div>
-            <div class="step bloc">
-            </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
     
-             <div class="step bloc">
+             <div class="step bloc gray">
             </div>
             <div class="step bloc">
             </div>
             <div class="step bloc">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
     
-             <div class="step bloc">
+             <div class="step bloc gray">
             </div>
             <div class="step bloc">
             </div>
             <div class="step bloc">
             </div>
+            <div class="step bloc gray">
+            </div>
+    
+             <div class="step bloc gray">
+            </div>
             <div class="step bloc">
+            </div>
+            <div class="step bloc">
+            </div>
+            <div class="step bloc gray">
             </div>
      </div>
      <div id="vertical-line">
      <div id="user-two" class="container-step">
-            <div class="step bloc">
+              <div class="step bloc gray">
+            </div>
+            <div class="step bloc gray">
+            </div>
+            <div class="step bloc gray">
+            </div>
+            <div class="step bloc gray">
+            </div>
+    
+             <div class="step bloc gray">
             </div>
             <div class="step bloc">
             </div>
@@ -105,7 +134,7 @@
             <div class="step bloc">
             </div>
     
-             <div class="step bloc">
+             <div class="step bloc gray">
             </div>
             <div class="step bloc">
             </div>
@@ -114,82 +143,68 @@
             <div class="step bloc">
             </div>
     
-             <div class="step bloc">
+             <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
-            </div>
-    
-             <div class="step bloc">
-            </div>
-            <div class="step bloc">
-            </div>
-            <div class="step bloc">
-            </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
      </div>
       <div id="space-user" class="container-step">
             
-                <div class=" bloc">
+                <div class="bloc one-four">
                 </div>
                 <div id="home-user-one" class="bloc">
                 </div>
-                <div  id="arrived-user-one" class=" bloc">
+                <div  id="arrived-user-one" class="step bloc">
                 </div>
                 
-                <div  class="bloc">
+                <div  class="bloc one-two">
                 </div>
     
     
-            <div id="arrived-user-four"class="bloc">
+            <div id="arrived-user-four"class="step bloc">
             </div>
-            <div class="bloc">
+            <div id="yellow" class="bloc">
+                     0%
             </div>
-            <div class=" bloc">
+            <div id="green" class=" bloc">
+                     0%
             </div>
             <div id="home-user-two" class=" bloc">
             </div>
             <div  id="home-user-four" class=" bloc">
             </div>
-            <div  class=" bloc">
+            <div id="red" class=" bloc">
+                0%
             </div>
-            <div class=" bloc">
+            <div id="blue" class=" bloc">
+                0%
             </div>
-            <div id="arrived-user-two" class=" bloc">
+            <div id="arrived-user-two" class="step bloc">
             </div>
         
     
-             <div class=" bloc">
+             <div class=" bloc tree-four">
             </div>
-            <div id="arrived-user-tree" class=" bloc">
+            <div id="arrived-user-tree" class="step bloc">
             </div>
             <div id="home-user-tree" class=" bloc">
             </div>
           
-            <div class=" bloc">
+            <div class=" bloc two-tree">
             </div>
      </div>
       <div id="user-tree" class="container-step">
-            <div class="step bloc">
+                   <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
-            </div>
-    
-             <div class="step bloc">
-            </div>
-            <div class="step bloc">
-            </div>
-            <div class="step bloc">
-            </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
     
              <div class="step bloc">
@@ -198,54 +213,63 @@
             </div>
             <div class="step bloc">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
     
-             <div class="step bloc">
+             <div class="step bloc ">
             </div>
             <div class="step bloc">
             </div>
             <div class="step bloc">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
+            </div>
+    
+             <div class="step bloc gray">
+            </div>
+            <div class="step bloc gray">
+            </div>
+            <div class="step bloc gray">
+            </div>
+            <div class="step bloc  gray">
             </div>
      </div>
      </div>
       <div id="user-four" class="container-step">
-            <div class="step bloc">
+           <div class="step bloc gray">
             </div>
             <div class="step bloc">
             </div>
             <div class="step bloc">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
     
-             <div class="step bloc">
+             <div class="step bloc gray">
             </div>
             <div class="step bloc">
             </div>
             <div class="step bloc">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
     
-             <div class="step bloc">
+             <div class="step bloc gray">
             </div>
             <div class="step bloc">
             </div>
             <div class="step bloc">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
     
-             <div class="step bloc">
+             <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
-            <div class="step bloc">
+            <div class="step bloc gray">
             </div>
      </div>
 
