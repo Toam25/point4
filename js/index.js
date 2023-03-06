@@ -1,6 +1,3 @@
-
-
-
     let songStep = new Audio('songs/step.mp3');
     var dead_sound = new Audio('assets/audio/dead.mp3');
     var inout_sound = new Audio('assets/audio/inout.mp3');

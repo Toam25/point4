@@ -2,6 +2,7 @@
 const IMAGES_FOLDER = "../images"
 const SONG_FOLDER = "../songs"
 const PAWN_SIZE = 4;
+const ROAD_SIZE = 51.
 let playersIdentity = ['Pas de joeur', 'Human', 'bot']
 let userActifList = [];
 let indiceKeyUserActiflist = 0
@@ -23,7 +24,6 @@ let buttonActions;
 let divElementUserActif;
 let lastDiceValue = 0;
 let showDiceFaceTemporary;
-
 
 function dice() {
     diceValue = getRandomInt(6)
@@ -237,6 +237,8 @@ async function stepsMove(user, step) {
         }
     }
     resetAllPawnsVisibility()
+    setNumberOfJourneysTraveledPerCent()
+
     if (isSwitchToNextUser) {
         switchToNextUser()
     }
@@ -250,7 +252,18 @@ async function stepsMove(user, step) {
         }
         document.getElementById(userActif.buttonAction).innerHTML = getImageToButtonDice('ready', userActif);
     }
-
+}
+function setNumberOfJourneysTraveledPerCent() {
+    let tempValue = 0;
+    let roadTotalSize = PAWN_SIZE * ROAD_SIZE
+    userActif.pawns.forEach(pawn => {
+        tempValue = pawn.currentPosition + tempValue;
+        console.log("value", tempValue);
+    });
+    console.log(userActif)
+    console.log("value total", tempValue)
+    console.log("value divise", Math.round(tempValue / roadTotalSize * 100))
+    document.getElementById(mapUserToColor(userActif)).innerText = Math.round(tempValue / roadTotalSize * 100) + "%"
 }
 function switchToNextUser() {
 
@@ -370,4 +383,20 @@ function viewInstru() {
 }
 const hideInstru = () => {
     document.getElementById('modal').classList.add('hidden')
+}
+function mapUserToColor(user) {
+    switch (user.name) {
+        case "userA":
+            return "yellow"
+            break;
+        case "userB":
+            return "green"
+            break;
+        case "userC":
+            return "red"
+            break;
+        case "userD":
+            return "blue"
+            break;
+    }
 }
