@@ -5,7 +5,7 @@ class User {
     this.name = name;
     this.road = this.step(idRoad);
     this.idAvatar = idAvatar;
-    this.userAvatar = `<button id="${idAvatar}" class="pawn"></button>`
+    this.userAvatar = `<div id="${idAvatar}" class="pawn"></div>`
   }
 
 

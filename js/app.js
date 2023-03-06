@@ -1,5 +1,8 @@
 
-let playersIdentity = ['Pas de joeur', 'Human'/*, 'Robot'*/]
+const IMAGES_FOLDER = "../images"
+const SONG_FOLDER = "../songs"
+const PAWN_SIZE = 4;
+let playersIdentity = ['Pas de joeur', 'Human', 'bot']
 let userActifList = [];
 let indiceKeyUserActiflist = 0
 let userTypeA = 1;
@@ -9,24 +12,34 @@ let userTypeD = 1;
 let userActif;
 let diceValue;
 let pawnSelected;
-let songStep = new Audio('songs/step.mp3');
-var dead_sound = new Audio('assets/audio/dead.mp3');
-var inout_sound = new Audio('assets/audio/inout.mp3');
-var dice_sound = new Audio('songs/dice.mp3');
-var winnerSound = new Audio('assets/audio/winner.mp3');
+let songStep = new Audio(`${SONG_FOLDER}/step.mp3`);
+var dice_sound = new Audio(`${SONG_FOLDER}/dice.mp3`);
+var dead_sound = new Audio(`${SONG_FOLDER}/dice.mp3`);
+var win_sound = new Audio(`${SONG_FOLDER}/dice.mp3`);
+var winner_sound = new Audio(`${SONG_FOLDER}/dice.mp3`);
 let safePlace = [0, 1, 2, 3];
 let isSwitchToNextUser = true
 let buttonActions;
 let divElementUserActif;
 let lastDiceValue = 0;
 let showDiceFaceTemporary;
-const PAWN_SIZE = 4;
+
 
 function dice() {
     diceValue = getRandomInt(6)
+    // diceValue = parseInt(document.getElementById('dice_value').value)
     dice_sound.play()
-    document.getElementById(userActif.buttonAction).innerText = diceValue;
+    let buttonActifHtml = document.getElementById(userActif.buttonAction);
+    buttonActifHtml.innerText = diceValue
+    setThisButtonToActif(true);
     checkIfPawnCanMoveAndMakeItToVisible(diceValue)
+}
+
+const setThisButtonToActif = (isActif) => {
+    let buttonActifHtml = document.getElementById(userActif.buttonAction);
+    isActif ?
+        buttonActifHtml.setAttribute('disabled', true) :
+        buttonActifHtml.removeAttribute('disabled');
 }
 const checkIfPawnCanMoveAndMakeItToVisible = (diceValue) => {
     let pawnsUserActif = userActif.pawns;
@@ -62,7 +75,7 @@ function validateSelection() {
         if (userTypeA == 2) userA.isBot = true
     }
     else {
-        document.getElementById('button-user-one').classList.add('hidden')
+        let userOne = document.getElementById('button-user-one').classList.add('hidden');
     }
 
     if (userTypeB == 1 || userTypeB == 2) {
@@ -83,7 +96,7 @@ function validateSelection() {
 
     if (userTypeD == 1 || userTypeD == 2) {
         userD.isActif = true;
-        if (userTypeA == 2) userA.isBot = true
+        if (userTypeD == 2) userD.isBot = true
     }
     else {
         document.getElementById('button-user-four').classList.add('hidden')
@@ -91,26 +104,41 @@ function validateSelection() {
     initPlayer(() => {
         // hide window control
         document.getElementsByClassName('container-control')[0].classList.add('hidden')
-        divElementUserActif = document.getElementById(userActif.buttonAction).classList.add('active')
+        divElementUserActif = document.getElementById(userActif.buttonAction);
+        divElementUserActif.classList.add('active');
+        if (userActif.isBot) {
+
+            makeMovePawnByABot(userActif)
+        }
+        divElementUserActif.innerHTML = getImageToButtonDice("ready", userActif);
     })
+}
+
+function getImageToButtonDice(type = "", user) {
+    imageName = (type == "user" && user.isBot) ? "bot" : (type == "user" && !user.isBot) ? "user" : "ready"
+    return `<img class="image-in-button-dice" src= "${IMAGES_FOLDER}/${imageName}.png" alt="${type}">`
 }
 function initPlayer(callback) {
 
     if (userA.isActif) {
         placePawnsForUserActifInHome(userA)
         userActifList.push(userA)
+        document.getElementById('button-user-one').innerHTML = getImageToButtonDice('user', userA);
     }
     if (userB.isActif) {
         placePawnsForUserActifInHome(userB)
         userActifList.push(userB)
+        document.getElementById('button-user-two').innerHTML = getImageToButtonDice('user', userB);
     }
     if (userC.isActif) {
         placePawnsForUserActifInHome(userC)
         userActifList.push(userC)
+        document.getElementById('button-user-tree').innerHTML = getImageToButtonDice('user', userC);
     }
     if (userD.isActif) {
         placePawnsForUserActifInHome(userD)
         userActifList.push(userD)
+        document.getElementById('button-user-four').innerHTML = getImageToButtonDice('user', userD);
     }
     //check if number or player > 0
     if (userActifList.length >= 1) {
@@ -189,7 +217,7 @@ async function stepsMove(user, step) {
             for (const i of userActif.pawns) {
                 for (const j of userInList.pawns) {
                     if (i.road[i.currentPosition] == j.road[j.currentPosition]) {
-
+                        dead_sound.play()
                         if (!safePlace.includes(j.road[j.currentPosition - 1])) {
                             while (j.currentPosition != 0) {
                                 document.getElementsByClassName('step')[j.road[j.currentPosition - 1]].append(document.getElementById(j.idAvatar));
@@ -200,7 +228,6 @@ async function stepsMove(user, step) {
                             isSwitchToNextUser = false;
                         }
                         j.status = "home"
-                        dead_sound.play()
                     }
                     else {
                         continue
@@ -215,31 +242,52 @@ async function stepsMove(user, step) {
     }
     else {
         isSwitchToNextUser = true
+        if (userActif.isBot) {
+            makeMovePawnByABot(userActif)
+        }
+        else {
+            setThisButtonToActif(false)
+        }
+        document.getElementById(userActif.buttonAction).innerHTML = getImageToButtonDice('ready', userActif);
     }
 
 }
 function switchToNextUser() {
-    ++indiceKeyUserActiflist;
-    //set Indice of user to next user
-    if (userActifList.length - 1 < indiceKeyUserActiflist) {
-        indiceKeyUserActiflist = 0
-    }
-    // set nex user 
-    userActif = userActifList[indiceKeyUserActiflist]
 
-    //set button next user 
-    buttonActions = document.getElementsByClassName('action');
-    //disable all button user
-    disableButtonElement(buttonActions)
-    //actif next button user
-    divElementUserActif = document.getElementById(userActif.buttonAction);
-    divElementUserActif.disabled = false
-    divElementUserActif.classList.add('active')
-    //make pawn user actif visible  
-    removePawnsUserDivElementToFront();
-    makePawnsUserDivElementToFront();
+    setTimeout(() => {
+        ++indiceKeyUserActiflist;
+        //set Indice of user to next user
+        if (userActifList.length - 1 < indiceKeyUserActiflist) {
+            indiceKeyUserActiflist = 0
+        }
+        //set image in button to userpng
+
+        document.getElementById(userActif.buttonAction).innerHTML = getImageToButtonDice('user', userActif)
+        // set next user
+        userActif = userActifList[indiceKeyUserActiflist]
+
+        //set image for next user to ready.png
+        document.getElementById(userActif.buttonAction).innerHTML = getImageToButtonDice('ready', userActif)
+
+        //set button next user 
+        buttonActions = document.getElementsByClassName('action');
+        //disable all button user
+        disableButtonElement(buttonActions)
+        //actif next button user
+        divElementUserActif = document.getElementById(userActif.buttonAction);
+
+        divElementUserActif.disabled = false
+        divElementUserActif.classList.add('active')
+        //make pawn user actif visible  
+        if (userActif.isBot) {
+            makeMovePawnByABot(userActif);
+        }
+        removePawnsUserDivElementToFront();
+        makePawnsUserDivElementToFront();
+    }, 1000)
 
 }
+
 
 const makePawnsUserDivElementToFront = () => {
     for (const pawnUserActifDivElement of userActif.pawns) {

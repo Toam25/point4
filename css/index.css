@@ -3,6 +3,8 @@
     --green: #28b12b;
     --yellow: #dfdf40;
     --blue: #0e6fd7;
+    --color-border: gray;
+    --background-color: black;
 }
 
 .version {
@@ -40,6 +42,7 @@ body {
     height: 100vh;
     width: 100vw;
     margin: 0;
+    background-color: var(--background-color);
 }
 
 .action:not(disabled) {
@@ -77,9 +80,9 @@ body {
     content: "";
     position: absolute;
     border-bottom: 15px solid var(--blue);
-    border-left: 15px solid white;
+    border-left: 15px solid transparent;
     border-right: 15px solid var(--yellow);
-    border-top: 15px solid white;
+    border-top: 15px solid transparent;
 }
 
 .one-two::after {
@@ -87,16 +90,16 @@ body {
     position: absolute;
     border-bottom: 15px solid var(--green);
     border-left: 15px solid var(--yellow);
-    border-right: 15px solid white;
-    border-top: 15px solid white;
+    border-right: 15px solid transparent;
+    border-top: 15px solid transparent;
 }
 
 .two-tree::after {
     content: "";
     position: absolute;
-    border-bottom: 15px solid #fff;
+    border-bottom: 15px solid transparent;
     border-left: 15px solid var(--red);
-    border-right: 15px solid #fff;
+    border-right: 15px solid transparent;
     border-top: 15px solid var(--green);
 }
 
@@ -114,8 +117,8 @@ body {
 .tree-four::after {
     content: "";
     position: absolute;
-    border-bottom: 15px solid white;
-    border-left: 15px solid white;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid transparent;
     border-right: 15px solid var(--red);
     border-top: 15px solid var(--blue);
 }
@@ -255,6 +258,10 @@ h1>span {
     align-items: center;
 }
 
+button {
+    color: black;
+}
+
 .bloc {
     width: 30px;
     height: 30px;
@@ -285,6 +292,11 @@ h1>span {
     border: 1px solid var(--green);
 }
 
+img.image-in-button-dice {
+    max-width: 100%;
+    max-height: 100%;
+}
+
 #arrived-user-tree,
 #home-user-tree {
     background: var(--red);
@@ -305,9 +317,10 @@ h1>span {
 }
 
 #pause-top-left {
-    top: 97px;
-    left: 99px;
+    top: 98px;
+    left: 100px;
     border-radius: 40px 0 0;
+    background-color: var(--yellow);
 }
 
 #user-one {
@@ -329,9 +342,10 @@ h1>span {
 }
 
 #pause-bottom-right {
-    top: 258PX;
-    left: 260px;
+    top: 256PX;
+    left: 258px;
     border-radius: 0px 0px 40px 0px;
+    background: var(--red);
 }
 
 .zIndexMax {
@@ -391,9 +405,10 @@ h1>span {
 }
 
 #pause-bottom-left {
-    top: 258PX;
-    left: 99px;
+    top: 256PX;
+    left: 100px;
     border-radius: 0px 0px 0px 40px;
+    background-color: var(--blue);
 }
 
 /* .step>.pawn {
@@ -404,14 +419,15 @@ h1>span {
 } */
 
 #pause-top-right {
-    top: 97px;
-    left: 260px;
+    top: 98px;
+    left: 258px;
     border-radius: 0 40px 0 0;
+    background-color: var(--green);
 }
 
 #container-game {
     width: 390px;
-    height: 391px;
+    height: 390px;
     position: relative;
 }
 
@@ -448,9 +464,23 @@ h1>span {
     background: blue;
 }
 
+.head {
+    background: black;
+    height: 15px;
+    width: 15px;
+    border-radius: 50px;
+}
+
+.body {
+    height: 15px;
+    width: 20px;
+    background: black;
+    border-radius: 50% 50% 0 0;
+}
+
 .pawn {
-    height: 13px;
-    width: 13px;
+    height: 9px;
+    width: 9px;
     border-radius: 50%;
     border: 2px solid white;
     cursor: pointer;
